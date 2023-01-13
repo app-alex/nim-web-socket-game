@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
-import { map, Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { SocketEvents } from '../enums/socket-events.enum';
 
 @Injectable({
