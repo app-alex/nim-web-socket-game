@@ -7,10 +7,11 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 import { FormsModule } from '@angular/forms';
 import { ChatComponent } from './chat/chat.component';
+import { RoomsComponent } from './rooms/rooms.component';
 
 const config: SocketIoConfig = { url: environment.SERVER_URL, options: {} };
 @NgModule({
-  declarations: [AppComponent, ChatComponent],
+  declarations: [AppComponent, ChatComponent, RoomsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

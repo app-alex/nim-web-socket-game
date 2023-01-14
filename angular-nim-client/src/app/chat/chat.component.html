@@ -1,4 +1,4 @@
 <input [(ngModel)]="message" />
 <button (click)="sendMessage()">Send</button>
 
-<div *ngFor="let message of $messages | async">{{ message }}</div>
+<div *ngFor="let message of messages$ | async">{{ message }}</div>

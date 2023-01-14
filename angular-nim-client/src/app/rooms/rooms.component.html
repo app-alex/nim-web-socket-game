@@ -1,0 +1,4 @@
+<input [(ngModel)]="roomName" />
+<button (click)="createRoom()">Create room</button>
+
+<div *ngFor="let room of rooms$ | async">{{ room }}</div>

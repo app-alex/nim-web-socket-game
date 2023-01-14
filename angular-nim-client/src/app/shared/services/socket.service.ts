@@ -9,11 +9,23 @@ import { SocketEvents } from '../enums/socket-events.enum';
 export class SocketService {
   constructor(private readonly socket: Socket) {}
 
-  public sendMessage(msg: string) {
-    this.socket.emit(SocketEvents.GET_MESSAGE, msg);
+  public connect() {
+    this.socket.connect();
+  }
+
+  public sendMessage(message: string) {
+    this.socket.emit(SocketEvents.NEW_MESSAGE, message);
   }
 
   public getMessage(): Observable<string[]> {
-    return this.socket.fromEvent(SocketEvents.MESSAGE);
+    return this.socket.fromEvent(SocketEvents.MESSAGES);
+  }
+
+  public createRoom(roomName: string) {
+    this.socket.emit(SocketEvents.CREATE_ROOM, roomName);
+  }
+
+  public getRooms(): Observable<string[]> {
+    return this.socket.fromEvent(SocketEvents.ROOMS);
   }
 }

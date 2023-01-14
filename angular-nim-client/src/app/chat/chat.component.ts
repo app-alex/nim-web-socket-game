@@ -9,12 +9,12 @@ import { SocketService } from '../shared/services/socket.service';
 })
 export class ChatComponent {
   public message = '';
-  public $messages!: Observable<string[]>;
+  public messages$!: Observable<string[]>;
 
   public constructor(private readonly socketService: SocketService) {}
 
   public ngOnInit(): void {
-    this.$messages = this.socketService.getMessage();
+    this.messages$ = this.socketService.getMessage();
   }
 
   public sendMessage() {

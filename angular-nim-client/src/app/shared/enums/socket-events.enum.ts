@@ -1,4 +1,6 @@
 export enum SocketEvents {
-  GET_MESSAGE = 'GET_MESSAGE',
-  MESSAGE = 'MESSAGE',
+  NEW_MESSAGE = 'NEW_MESSAGE',
+  MESSAGES = 'MESSAGES',
+  CREATE_ROOM = 'CREATE_ROOM',
+  ROOMS = 'ROOMS',
 }
