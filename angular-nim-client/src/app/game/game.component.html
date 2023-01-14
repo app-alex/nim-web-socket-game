@@ -1,0 +1,6 @@
+<button (click)="navigateToRooms()">Back to rooms</button>
+
+<app-chat
+  [messages]="messages$ | async"
+  (sendMessage)="sendMessage($event)"
+></app-chat>

@@ -1,5 +1,5 @@
-import { KeyValue } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SocketService } from '../shared/services/socket.service';
 
@@ -9,20 +9,27 @@ import { SocketService } from '../shared/services/socket.service';
   styleUrls: ['./rooms.component.scss'],
 })
 export class RoomsComponent implements OnInit {
-  clog(val: any) {
-    console.log(val);
-  }
-  public constructor(private readonly socketService: SocketService) {}
+  public constructor(
+    private readonly socketService: SocketService,
+    private readonly router: Router
+  ) {}
 
   public roomName!: string;
   public rooms$!: Observable<string[]>;
 
   public async ngOnInit(): Promise<void> {
-    this.socketService.connect();
+    this.socketService.requestRooms();
     this.rooms$ = this.socketService.getRooms();
   }
 
   public createRoom() {
     this.socketService.createRoom(this.roomName);
+
+    this.router.navigate(['game/' + this.roomName]);
+  }
+
+  public joinRoom(roomName: string) {
+    this.socketService.joinRoom(roomName);
+    this.router.navigate(['game/' + roomName]);
   }
 }

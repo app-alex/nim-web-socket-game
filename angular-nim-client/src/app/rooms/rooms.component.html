@@ -1,4 +1,6 @@
 <input [(ngModel)]="roomName" />
 <button (click)="createRoom()">Create room</button>
 
-<div *ngFor="let room of rooms$ | async">{{ room }}</div>
+<div *ngFor="let room of rooms$ | async" (click)="joinRoom(room)">
+  {{ room }}
+</div>

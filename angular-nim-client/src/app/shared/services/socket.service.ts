@@ -13,12 +13,16 @@ export class SocketService {
     this.socket.connect();
   }
 
-  public sendMessage(message: string) {
-    this.socket.emit(SocketEvents.NEW_MESSAGE, message);
+  public requestRooms() {
+    this.socket.emit(SocketEvents.REQUEST_ROOMS);
   }
 
-  public getMessage(): Observable<string[]> {
-    return this.socket.fromEvent(SocketEvents.MESSAGES);
+  public sendMessage(message: string, roomName: string) {
+    this.socket.emit(SocketEvents.NEW_MESSAGE, message, roomName);
+  }
+
+  public joinRoom(roomName: string) {
+    return this.socket.emit(SocketEvents.JOIN_ROOM, roomName);
   }
 
   public createRoom(roomName: string) {
@@ -27,5 +31,9 @@ export class SocketService {
 
   public getRooms(): Observable<string[]> {
     return this.socket.fromEvent(SocketEvents.ROOMS);
+  }
+
+  public getMessage(): Observable<string[]> {
+    return this.socket.fromEvent(SocketEvents.MESSAGES);
   }
 }

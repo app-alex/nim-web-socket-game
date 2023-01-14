@@ -2,26 +2,51 @@ const app = require("express")();
 const http = require("http").Server(app);
 const io = require("socket.io")(http, { cors: { origin: "*" } });
 
-const messages = [];
+const messages = {};
 const rooms = [];
 
 io.on("connection", (socket) => {
   console.log(socket.id + " connected");
 
-  io.emit("ROOMS", rooms);
+  socket.on("REQUEST_ROOMS", () => {
+    emitRooms();
+  });
 
   socket.on("CREATE_ROOM", (roomName) => {
+    if (!rooms.includes(roomName)) {
+      rooms.push(roomName);
+    }
+
     socket.join(roomName);
-    rooms.push(roomName);
+    emitRooms();
+  });
 
+  socket.on("JOIN_ROOM", (roomName) => {
+    socket.join(roomName);
+    emitRooms();
+    emitMessagesToRoom(roomName);
+  });
+
+  socket.on("NEW_MESSAGE", (message, roomName) => {
+    addMessageToRoom(message, roomName);
+    emitMessagesToRoom(roomName);
+  });
+
+  function emitRooms() {
     io.emit("ROOMS", rooms);
-  });
+  }
 
-  socket.on("NEW_MESSAGE", (message) => {
-    messages.push(message);
+  function emitMessagesToRoom(roomName) {
+    io.to(roomName).emit("MESSAGES", messages[roomName]);
+  }
 
-    io.emit("MESSAGES", messages);
-  });
+  function addMessageToRoom(message, roomName) {
+    if (messages[roomName]) {
+      messages[roomName].push(message);
+    } else {
+      messages[roomName] = [message];
+    }
+  }
 });
 
 http.listen(8000, () => {
