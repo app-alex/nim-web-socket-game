@@ -30,6 +30,11 @@
     &::placeholder {
       text-align: center;
     }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0px 0px 5px #0066ff;
+    }
   }
 
   &__button {
