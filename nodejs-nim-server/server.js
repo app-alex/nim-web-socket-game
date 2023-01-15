@@ -2,8 +2,9 @@ const app = require("express")();
 const http = require("http").Server(app);
 const io = require("socket.io")(http, { cors: { origin: "*" } });
 
-const messages = {};
-const rooms = [];
+const DEFAULT_GAME_STATE = [3, 5, 7];
+
+const state = new Map(); //{ room: { messages, game }}
 
 io.on("connection", (socket) => {
   console.log(socket.id + " connected");
@@ -13,10 +14,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("CREATE_ROOM", (roomName) => {
-    if (!rooms.includes(roomName)) {
-      rooms.push(roomName);
-    }
-
+    createRoom(roomName);
     socket.join(roomName);
     emitRooms();
   });
@@ -41,23 +39,31 @@ io.on("connection", (socket) => {
     emitMessagesToRoom(roomName);
   });
 
+  // FUNCTIONS
+  function createRoom(roomName) {
+    if (!state.has(roomName)) {
+      state.set(roomName, { messages: [], game: DEFAULT_GAME_STATE });
+    }
+  }
+
   function emitRooms() {
     io.emit(
       "ROOMS",
-      rooms.filter((room) => getNumberOfClientsInRoom(room) < 2)
+      Array.from(state.keys()).filter(
+        (room) => getNumberOfClientsInRoom(room) < 2
+      )
     );
   }
 
   function emitMessagesToRoom(roomName) {
-    io.to(roomName).emit("MESSAGES", messages[roomName]);
+    io.to(roomName).emit("MESSAGES", getMessagesFromRoom(roomName));
   }
 
   function addMessageToRoom(message, roomName) {
-    if (messages[roomName]) {
-      messages[roomName].push(message);
-    } else {
-      messages[roomName] = [message];
-    }
+    state.set(roomName, {
+      messages: [...getMessagesFromRoom(roomName), message],
+      game: getGameFromRoom(roomName),
+    });
   }
 
   function getNumberOfClientsInRoom(roomName) {
@@ -65,10 +71,16 @@ io.on("connection", (socket) => {
     return clients ? clients.size : 0;
   }
 
+  function getMessagesFromRoom(roomName) {
+    return state.get(roomName).messages;
+  }
+
+  function getGameFromRoom(roomName) {
+    return state.get(roomName).game;
+  }
+
   function removeRoom(roomName) {
-    const index = rooms.indexOf(roomName);
-    rooms.splice(index, 1);
-    console.log(rooms);
+    state.delete(roomName);
   }
 });
 
