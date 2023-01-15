@@ -22,6 +22,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("JOIN_ROOM", (roomName) => {
+    if (getNumberOfClientsInRoom(roomName) > 1) return;
+
     socket.join(roomName);
     emitRooms();
     emitMessagesToRoom(roomName);
@@ -40,7 +42,10 @@ io.on("connection", (socket) => {
   });
 
   function emitRooms() {
-    io.emit("ROOMS", rooms);
+    io.emit(
+      "ROOMS",
+      rooms.filter((room) => getNumberOfClientsInRoom(room) < 2)
+    );
   }
 
   function emitMessagesToRoom(roomName) {
