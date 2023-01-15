@@ -1,6 +1,30 @@
-<input [(ngModel)]="roomName" />
-<button (click)="createRoom()">Create room</button>
+<div class="container">
+  <div class="container__title">NIM</div>
 
-<div *ngFor="let room of rooms$ | async" (click)="joinRoom(room)">
-  {{ room }}
+  <div class="container__form">
+    <input
+      class="container__input"
+      [(ngModel)]="roomName"
+      placeholder="Room name"
+      (keydown.enter)="createRoom()"
+    />
+    <div
+      class="container__button"
+      [ngClass]="{ 'container__button--disabled': !roomName }"
+      (click)="createRoom()"
+    >
+      Create room
+    </div>
+  </div>
+
+  <div class="container__label">Rooms:</div>
+  <div class="container__rooms">
+    <div
+      class="container__button"
+      *ngFor="let room of rooms$ | async"
+      (click)="joinRoom(room)"
+    >
+      {{ room }}
+    </div>
+  </div>
 </div>
