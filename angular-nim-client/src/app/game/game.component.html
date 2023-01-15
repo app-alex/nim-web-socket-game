@@ -1,4 +1,5 @@
-<button (click)="navigateToRooms()">Back to rooms</button>
+<button (click)="leaveRoom()">Back to rooms</button>
+<div>{{ roomName }}</div>
 
 <app-chat
   [messages]="messages$ | async"

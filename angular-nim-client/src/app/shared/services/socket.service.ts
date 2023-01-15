@@ -25,6 +25,10 @@ export class SocketService {
     return this.socket.emit(SocketEvents.JOIN_ROOM, roomName);
   }
 
+  public leaveRoom(roomName: string) {
+    return this.socket.emit(SocketEvents.LEAVE_ROOM, roomName);
+  }
+
   public createRoom(roomName: string) {
     this.socket.emit(SocketEvents.CREATE_ROOM, roomName);
   }

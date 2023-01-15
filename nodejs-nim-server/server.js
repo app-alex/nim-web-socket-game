@@ -27,6 +27,13 @@ io.on("connection", (socket) => {
     emitMessagesToRoom(roomName);
   });
 
+  socket.on("LEAVE_ROOM", (roomName) => {
+    socket.leave(roomName);
+    if (!getNumberOfClientsInRoom(roomName)) {
+      removeRoom(roomName);
+    }
+  });
+
   socket.on("NEW_MESSAGE", (message, roomName) => {
     addMessageToRoom(message, roomName);
     emitMessagesToRoom(roomName);
@@ -46,6 +53,17 @@ io.on("connection", (socket) => {
     } else {
       messages[roomName] = [message];
     }
+  }
+
+  function getNumberOfClientsInRoom(roomName) {
+    const clients = io.sockets.adapter.rooms.get(roomName);
+    return clients ? clients.size : 0;
+  }
+
+  function removeRoom(roomName) {
+    const index = rooms.indexOf(roomName);
+    rooms.splice(index, 1);
+    console.log(rooms);
   }
 });
 

@@ -10,7 +10,7 @@ import { SocketService } from '../shared/services/socket.service';
 })
 export class GameComponent implements OnInit {
   public messages$!: Observable<string[]>;
-  private roomName!: string;
+  public roomName!: string;
 
   public constructor(
     private readonly socketService: SocketService,
@@ -30,7 +30,8 @@ export class GameComponent implements OnInit {
     this.socketService.sendMessage(message, this.roomName);
   }
 
-  public navigateToRooms() {
+  public leaveRoom() {
+    this.socketService.leaveRoom(this.roomName);
     this.router.navigate(['rooms']);
   }
 }

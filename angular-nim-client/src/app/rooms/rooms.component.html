@@ -17,14 +17,22 @@
     </div>
   </div>
 
-  <div class="container__label">Rooms:</div>
-  <div class="container__rooms">
-    <div
-      class="container__button"
-      *ngFor="let room of rooms$ | async"
-      (click)="joinRoom(room)"
-    >
-      {{ room }}
-    </div>
-  </div>
+  <ng-container *ngIf="rooms$ | async as rooms">
+    <ng-container *ngIf="rooms.length; else noRooms">
+      <div class="container__label">Rooms:</div>
+      <div class="container__rooms">
+        <div
+          class="container__button"
+          *ngFor="let room of rooms"
+          (click)="joinRoom(room)"
+        >
+          {{ room }}
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #noRooms>
+    <div class="container__label">No rooms yet</div>
+  </ng-template>
 </div>
