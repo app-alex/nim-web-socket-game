@@ -1,4 +1,21 @@
-<input [(ngModel)]="message" (keydown.enter)="onSendMessage()" />
-<button (click)="onSendMessage()">Send</button>
+<div class="container">
+  <div #chatMessages class="container__messages">
+    <div *ngFor="let message of messages">{{ message }}</div>
+  </div>
 
-<div *ngFor="let message of messages">{{ message }}</div>
+  <div class="container__wrapper">
+    <input
+      class="container__input"
+      [(ngModel)]="message"
+      (keydown.enter)="onSendMessage()"
+      autofocus
+    />
+    <button
+      class="container__button"
+      [ngClass]="{ 'container__button--disabled': !message }"
+      (click)="onSendMessage()"
+    >
+      Send
+    </button>
+  </div>
+</div>
