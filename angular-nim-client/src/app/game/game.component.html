@@ -1,7 +1,13 @@
-<button (click)="leaveRoom()">Back to rooms</button>
-<div>{{ roomName }}</div>
+<div class="container">
+  <div class="container__header">
+    <div class="container__button" (click)="leaveRoom()">Leave</div>
 
-<app-chat
-  [messages]="messages$ | async"
-  (sendMessage)="sendMessage($event)"
-></app-chat>
+    <div class="container__info">Room: {{ roomName }}</div>
+  </div>
+
+  <app-chat
+    class="container__chat"
+    [messages]="messages$ | async"
+    (sendMessage)="sendMessage($event)"
+  ></app-chat>
+</div>
