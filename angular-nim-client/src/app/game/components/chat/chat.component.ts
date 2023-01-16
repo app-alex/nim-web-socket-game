@@ -1,6 +1,5 @@
 import {
   AfterViewChecked,
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -16,10 +15,13 @@ import {
 })
 export class ChatComponent implements AfterViewChecked {
   public message = '';
+  public chatHeight = 0;
 
   @Input() public messages!: string[] | null;
   @Output() public sendMessage = new EventEmitter<string>();
   @ViewChild('chatMessages') private chatMessagesRef!: ElementRef;
+
+  public ngDoCheck(): void {}
 
   public ngAfterViewChecked(): void {
     this.scrollChat();

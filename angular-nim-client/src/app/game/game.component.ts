@@ -11,22 +11,21 @@ import { SocketService } from '../shared/services/socket.service';
 export class GameComponent implements OnInit {
   public messages$!: Observable<string[]>;
   public roomName!: string;
+  public game$!: Observable<number[]>;
 
   public constructor(
     private readonly socketService: SocketService,
     private readonly router: Router,
-    public activatedRoute: ActivatedRoute
+    private readonly activatedRoute: ActivatedRoute
   ) {}
 
   public ngOnInit(): void {
-    this.messages$ = this.socketService.getMessage();
     this.roomName = this.activatedRoute.snapshot.params['room'];
-    console.log(this.roomName);
+    this.messages$ = this.socketService.getMessage();
+    this.game$ = this.socketService.getGame();
   }
 
   public sendMessage(message: string) {
-    console.log(message, this.roomName);
-
     this.socketService.sendMessage(message, this.roomName);
   }
 

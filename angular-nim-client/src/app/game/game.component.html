@@ -5,6 +5,12 @@
     <div class="container__info">Room: {{ roomName }}</div>
   </div>
 
+  <app-play-board
+    class="container__playboard"
+    *ngIf="game$ | async as game"
+    [game]="game"
+  ></app-play-board>
+
   <app-chat
     class="container__chat"
     [messages]="messages$ | async"

@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="container__board">
+    <div
+      *ngFor="let numberOfItems of game; let groupIndex = index"
+      class="container__group"
+    >
+      <div
+        *ngFor="let itemIndex of getIterableArray(numberOfItems)"
+        class="container__item"
+      ></div>
+    </div>
+  </div>
+</div>

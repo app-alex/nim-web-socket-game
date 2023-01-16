@@ -13,10 +13,15 @@ io.on("connection", (socket) => {
     emitRooms();
   });
 
+  socket.on("REQUEST_GAME", (roomName) => {
+    emitGameToRoom(roomName);
+  });
+
   socket.on("CREATE_ROOM", (roomName) => {
     createRoom(roomName);
     socket.join(roomName);
     emitRooms();
+    emitGameToRoom(roomName);
   });
 
   socket.on("JOIN_ROOM", (roomName) => {
@@ -25,6 +30,7 @@ io.on("connection", (socket) => {
     socket.join(roomName);
     emitRooms();
     emitMessagesToRoom(roomName);
+    emitGameToRoom(roomName);
   });
 
   socket.on("LEAVE_ROOM", (roomName) => {
@@ -59,6 +65,10 @@ io.on("connection", (socket) => {
     io.to(roomName).emit("MESSAGES", getMessagesFromRoom(roomName));
   }
 
+  function emitGameToRoom(roomName) {
+    io.to(roomName).emit("GAME", getGameFromRoom(roomName));
+  }
+
   function addMessageToRoom(message, roomName) {
     state.set(roomName, {
       messages: [...getMessagesFromRoom(roomName), message],
@@ -72,10 +82,14 @@ io.on("connection", (socket) => {
   }
 
   function getMessagesFromRoom(roomName) {
+    if (!state.has(roomName)) return [];
+
     return state.get(roomName).messages;
   }
 
   function getGameFromRoom(roomName) {
+    if (!state.has(roomName)) return [];
+
     return state.get(roomName).game;
   }
 

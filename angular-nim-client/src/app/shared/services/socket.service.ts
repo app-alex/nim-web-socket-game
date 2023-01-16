@@ -34,11 +34,11 @@ export class SocketService {
   }
 
   public requestGameStatus(roomName: string) {
-    this.socket.emit(SocketEvents.REQUEST_GAME_STATUS, roomName);
+    this.socket.emit(SocketEvents.REQUEST_GAME, roomName);
   }
 
   public getGame(): Observable<number[]> {
-    return this.socket.fromEvent(SocketEvents.GET_GAME_STATUS);
+    return this.socket.fromEvent(SocketEvents.GAME);
   }
 
   public getRooms(): Observable<string[]> {

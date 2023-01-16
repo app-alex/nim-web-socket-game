@@ -9,10 +9,17 @@ import { FormsModule } from '@angular/forms';
 import { ChatComponent } from './game/components/chat/chat.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { GameComponent } from './game/game.component';
+import { PlayBoardComponent } from './game/components/play-board/play-board.component';
 
 const config: SocketIoConfig = { url: environment.SERVER_URL, options: {} };
 @NgModule({
-  declarations: [AppComponent, ChatComponent, RoomsComponent, GameComponent],
+  declarations: [
+    AppComponent,
+    ChatComponent,
+    RoomsComponent,
+    GameComponent,
+    PlayBoardComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

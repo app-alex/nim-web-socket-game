@@ -1,9 +1,10 @@
 .container {
+  overflow: hidden;
   height: 100vh;
   display: flex;
   flex-direction: column;
-
   justify-content: space-between;
+  overflow: hidden;
 
   &__header {
     margin: 0.5rem;
@@ -12,8 +13,11 @@
   }
 
   &__chat {
-    align-items: flex-end;
-    justify-self: flex-end;
+    margin-top: 10rem;
+  }
+
+  &__playboard {
+    height: 100%;
   }
 
   &__info {
