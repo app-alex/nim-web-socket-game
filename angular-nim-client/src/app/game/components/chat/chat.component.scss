@@ -12,7 +12,7 @@
   &__messages {
     background-color: rgba(0, 0, 0, 0.05);
     scroll-behavior: smooth;
-    max-height: 70px;
+    max-height: 7rem;
     overflow: auto;
   }
 
@@ -20,9 +20,9 @@
     flex: 1;
     border: solid #1a1a1a;
     border-width: 2px 0 0 0;
-
     font-size: 1.5rem;
     min-height: 2rem;
+    width: calc(100% - 6rem);
     padding: 0;
 
     &:focus {
@@ -34,7 +34,7 @@
   &__button {
     border: solid #1a1a1a;
     border-width: 2px 0 0 2px;
-
+    width: 6rem;
     color: #3b3b3b;
     cursor: pointer;
     font-size: 1.5rem;
