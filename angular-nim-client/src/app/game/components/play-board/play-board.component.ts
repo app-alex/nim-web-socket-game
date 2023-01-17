@@ -7,20 +7,49 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PlayBoardComponent implements OnInit {
   @Input() public game: number[] = [];
-  public selectedItems: number[][] = [[]];
+  public gameState: number[][] = [];
 
   public ngOnInit(): void {
-    this.setSelectedItems();
+    this.setGameState();
   }
 
   public onSelectItem(groupIndex: number, itemIndex: number) {
-    this.selectedItems[groupIndex][itemIndex] = 1;
+    if (
+      this.gameState.some((group, index) =>
+        group.some((item) => item && index !== groupIndex)
+      )
+    ) {
+      this.setGameState();
+    }
+
+    this.gameState[groupIndex][itemIndex] =
+      1 - this.gameState[groupIndex][itemIndex];
   }
 
-  public setSelectedItems() {
+  public onTake() {
+    console.log('take');
+  }
+
+  private setGameState() {
+    const gameState: number[][] = [];
+
+    this.game.map((numberOfItems) => {
+      const group: number[] = [];
+
+      for (let itemIndex = 0; itemIndex < numberOfItems; itemIndex++) {
+        group.push(0);
+      }
+
+      gameState.push(group);
+    });
+
+    this.gameState = gameState;
+  }
+
+  private setSelectedItems() {
     this.game.map((numberOfItems, groupIndex) => {
       for (let itemIndex = 0; itemIndex < numberOfItems; itemIndex++) {
-        this.selectedItems[groupIndex][itemIndex] = 0;
+        this.gameState[groupIndex][itemIndex] = 0;
       }
     });
   }

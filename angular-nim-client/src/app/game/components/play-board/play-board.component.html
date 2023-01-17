@@ -1,13 +1,19 @@
 <div class="container">
   <div class="container__board">
     <div
-      *ngFor="let numberOfItems of game; let groupIndex = index"
+      *ngFor="let items of game; let groupIndex = index"
       class="container__group"
     >
       <div
-        *ngFor="let itemIndex of getIterableArray(numberOfItems)"
+        *ngFor="let item of getIterableArray(items); let itemIndex = index"
         class="container__item"
+        (click)="onSelectItem(groupIndex, itemIndex)"
+        [ngClass]="{
+          'container__item--selected': gameState[groupIndex][itemIndex]
+        }"
       ></div>
     </div>
   </div>
+
+  <div class="container__button" (click)="onTake()">Take</div>
 </div>
