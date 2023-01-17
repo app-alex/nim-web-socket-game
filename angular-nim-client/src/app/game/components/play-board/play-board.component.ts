@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { GameStateUpdate } from 'src/app/shared/models/game-state-update.model';
 
 @Component({
   selector: 'app-play-board',
@@ -7,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PlayBoardComponent implements OnInit {
   @Input() public game: number[] = [];
+  @Output() public sendGameStateUpdate = new EventEmitter<GameStateUpdate>();
   public gameState: number[][] = [];
 
   public ngOnInit(): void {
@@ -27,7 +29,15 @@ export class PlayBoardComponent implements OnInit {
   }
 
   public onTake() {
-    console.log('take');
+    const groupIndex = this.gameState.findIndex((group) =>
+      group.some((item) => item)
+    );
+
+    const itemIndex = this.gameState[groupIndex].reduce(
+      (accumulator, currentValue) => accumulator + currentValue
+    );
+
+    this.sendGameStateUpdate.emit({ groupIndex, itemIndex });
   }
 
   private setGameState() {
