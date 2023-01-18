@@ -10,6 +10,7 @@
   }
 
   &__messages {
+    padding: 0 0.5rem;
     background-color: rgba(0, 0, 0, 0.05);
     scroll-behavior: smooth;
     max-height: 7rem;
@@ -17,13 +18,13 @@
   }
 
   &__input {
+    padding: 0 0.5rem;
     flex: 1;
     border: solid #1a1a1a;
     border-width: 2px 0 0 0;
     font-size: 1.5rem;
     min-height: 2rem;
     width: calc(100% - 6rem);
-    padding: 0;
 
     &:focus {
       outline: none;
@@ -52,6 +53,18 @@
     &--disabled {
       background-color: #ebebe4;
       pointer-events: none;
+    }
+  }
+}
+
+.message {
+  &__from {
+    &--you {
+      color: #0066ff;
+    }
+
+    &--foe {
+      color: #dc143c;
     }
   }
 }

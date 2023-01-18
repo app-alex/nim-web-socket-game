@@ -1,7 +1,22 @@
 <div class="container">
   <div #chatMessages class="container__messages">
-    <div *ngFor="let message of messages">
-      {{ message.from + ": " + message.text }}
+    <div class="message" *ngFor="let message of messages">
+      <span>
+        {{ message.date | date : "mediumTime" }}
+      </span>
+      <span> | </span>
+      <span
+        class="message__from"
+        [ngClass]="
+          message.from === 'You' ? 'message__from--you' : 'message__from--foe'
+        "
+      >
+        {{ message.from }}
+      </span>
+      <span>: </span>
+      <span>
+        {{ message.text }}
+      </span>
     </div>
   </div>
 
