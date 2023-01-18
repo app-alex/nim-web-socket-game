@@ -1,7 +1,7 @@
 <div class="container">
   <div #chatMessages class="container__messages">
     <div *ngFor="let message of messages">
-      {{ message }}
+      {{ message.from + ": " + message.text }}
     </div>
   </div>
 

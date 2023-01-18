@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Message } from '../shared/models/message.model';
 import { SocketService } from '../shared/services/socket.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { SocketService } from '../shared/services/socket.service';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
-  public messages$!: Observable<string[]>;
+  public messages$!: Observable<Message[]>;
   public roomName!: string;
   public game$!: Observable<number[]>;
 
@@ -21,6 +22,8 @@ export class GameComponent implements OnInit {
 
   public ngOnInit(): void {
     this.roomName = this.activatedRoute.snapshot.params['room'];
+    this.socketService.joinRoom(this.roomName);
+
     this.messages$ = this.socketService.getMessage();
     this.game$ = this.socketService.getGame();
   }

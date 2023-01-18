@@ -4,28 +4,26 @@ const io = require("socket.io")(http, { cors: { origin: "*" } });
 
 const DEFAULT_GAME_STATE = [3, 5, 7];
 
-const state = new Map(); //{ room: { messages, game }}
+const state = new Map();
+// : { roomName: string, { messages: { message: string, from: string, date: Date }[], game: number[] }}[]
 
 io.on("connection", (socket) => {
   console.log(socket.id + " connected");
 
-  socket.on("REQUEST_ROOMS", () => {
-    emitRooms();
+  socket.on("disconnecting", () => {
+    socket.rooms.forEach((roomName) => {
+      leaveRoom(roomName);
+    });
   });
 
-  socket.on("REQUEST_GAME", (roomName) => {
-    emitGameToRoom(roomName);
-  });
-
-  socket.on("CREATE_ROOM", (roomName) => {
-    createRoom(roomName);
-    socket.join(roomName);
-    emitRooms();
-    emitGameToRoom(roomName);
-  });
+  emitRooms();
 
   socket.on("JOIN_ROOM", (roomName) => {
-    if (getNumberOfClientsInRoom(roomName) > 1) return;
+    if (!state.has(roomName)) {
+      createRoom(roomName);
+    }
+
+    if (getClientsFromRoom(roomName).length > 1) return;
 
     socket.join(roomName);
     emitRooms();
@@ -34,10 +32,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("LEAVE_ROOM", (roomName) => {
-    socket.leave(roomName);
-    if (!getNumberOfClientsInRoom(roomName)) {
-      removeRoom(roomName);
-    }
+    leaveRoom(roomName);
   });
 
   socket.on("NEW_MESSAGE", (message, roomName) => {
@@ -47,22 +42,40 @@ io.on("connection", (socket) => {
 
   // FUNCTIONS
   function createRoom(roomName) {
-    if (!state.has(roomName)) {
-      state.set(roomName, { messages: [], game: DEFAULT_GAME_STATE });
-    }
+    state.set(roomName, { messages: [], game: DEFAULT_GAME_STATE });
   }
 
   function emitRooms() {
     io.emit(
       "ROOMS",
       Array.from(state.keys()).filter(
-        (room) => getNumberOfClientsInRoom(room) < 2
+        (room) => getClientsFromRoom(room).length < 2
       )
     );
   }
 
+  function leaveRoom(roomName) {
+    socket.leave(roomName);
+
+    if (!getClientsFromRoom(roomName).length) {
+      state.delete(roomName);
+    }
+
+    emitRooms();
+  }
+
   function emitMessagesToRoom(roomName) {
-    io.to(roomName).emit("MESSAGES", getMessagesFromRoom(roomName));
+    getClientsFromRoom(roomName).forEach((client) => {
+      const messagesData = getMessagesFromRoom(roomName).map((message) => {
+        return {
+          from: client == message.from ? "You" : "Foe",
+          text: message.text,
+          date: message.date,
+        };
+      });
+
+      io.to(client).emit("MESSAGES", messagesData);
+    });
   }
 
   function emitGameToRoom(roomName) {
@@ -70,15 +83,18 @@ io.on("connection", (socket) => {
   }
 
   function addMessageToRoom(message, roomName) {
+    const newMessageData = { from: socket.id, text: message, date: new Date() };
+
     state.set(roomName, {
-      messages: [...getMessagesFromRoom(roomName), message],
+      messages: [...getMessagesFromRoom(roomName), newMessageData],
       game: getGameFromRoom(roomName),
     });
   }
 
-  function getNumberOfClientsInRoom(roomName) {
+  function getClientsFromRoom(roomName) {
     const clients = io.sockets.adapter.rooms.get(roomName);
-    return clients ? clients.size : 0;
+
+    return clients ? [...clients] : [];
   }
 
   function getMessagesFromRoom(roomName) {
@@ -91,10 +107,6 @@ io.on("connection", (socket) => {
     if (!state.has(roomName)) return [];
 
     return state.get(roomName).game;
-  }
-
-  function removeRoom(roomName) {
-    state.delete(roomName);
   }
 });
 

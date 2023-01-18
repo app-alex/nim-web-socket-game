@@ -18,18 +18,14 @@ export class RoomsComponent implements OnInit {
   public rooms$!: Observable<string[]>;
 
   public async ngOnInit(): Promise<void> {
-    this.socketService.requestRooms();
     this.rooms$ = this.socketService.getRooms();
   }
 
   public createRoom() {
-    this.socketService.createRoom(this.roomName);
-
     this.router.navigate(['game/' + this.roomName]);
   }
 
   public joinRoom(roomName: string) {
-    this.socketService.joinRoom(roomName);
     this.router.navigate(['game/' + roomName]);
   }
 }
