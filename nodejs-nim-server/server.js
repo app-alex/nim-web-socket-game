@@ -20,7 +20,7 @@ io.on("connection", (socket) => {
 
   socket.on("JOIN_ROOM", (roomName) => {
     if (!state.has(roomName)) {
-      createRoom(roomName);
+      resetRoom(roomName);
     }
 
     if (getClientsFromRoom(roomName).length > 1) return;
@@ -41,7 +41,7 @@ io.on("connection", (socket) => {
   });
 
   // FUNCTIONS
-  function createRoom(roomName) {
+  function resetRoom(roomName) {
     state.set(roomName, { messages: [], game: DEFAULT_GAME_STATE });
   }
 
@@ -59,9 +59,12 @@ io.on("connection", (socket) => {
 
     if (!getClientsFromRoom(roomName).length) {
       state.delete(roomName);
+    } else {
+      resetRoom(roomName);
     }
 
     emitRooms();
+    emitMessagesToRoom(roomName);
   }
 
   function emitMessagesToRoom(roomName) {
