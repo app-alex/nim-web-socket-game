@@ -7,6 +7,7 @@
   &__title {
     text-align: center;
     font-size: 2rem;
+    animation: title-animation 2s;
   }
 
   &__form {
@@ -62,5 +63,14 @@
       background-color: #ebebe4;
       pointer-events: none;
     }
+  }
+}
+
+@keyframes title-animation {
+  from {
+    color: white;
+  }
+  to {
+    color: default;
   }
 }
