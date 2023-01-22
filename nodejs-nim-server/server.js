@@ -87,7 +87,10 @@ io.on("connection", (socket) => {
       resetRoom(roomName);
     }
 
-    if (getClientsFromRoom(roomName).length === 2) return;
+    if (getClientsFromRoom(roomName).length === 2) {
+      emitStatusToRoom(socket.id);
+      return;
+    }
 
     socket.join(roomName);
     emitRooms();
@@ -147,6 +150,8 @@ io.on("connection", (socket) => {
   }
 
   function getRoomStatus(roomName) {
+    if (!getGameFromRoom(roomName).board) return "ROOM_FULL";
+
     if (
       !getGameFromRoom(roomName).board.reduce(
         (sum, itemsAmount) => sum + itemsAmount

@@ -12,6 +12,10 @@
       messages: messages$ | async
     } as roomState"
   >
+    <ng-container *ngIf="roomState.status === gameStatus.ROOM_FULL">
+      {{ leaveRoom() }}
+    </ng-container>
+
     <ng-container *ngIf="roomState.game as game">
       <ng-container *ngIf="roomState.status as status">
         <app-play-board
