@@ -1,9 +1,13 @@
 .container {
   height: 100%;
   margin: 0 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+  &__game {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   &__board {
     height: 100%;
@@ -41,7 +45,8 @@
   }
 
   &__button {
-    width: 3rem;
+    // width: 3rem;
+    width: fit-content;
     border: 2px solid #1a1a1a;
     color: #3b3b3b;
     cursor: pointer;
@@ -64,5 +69,14 @@
       background-color: #ebebe4;
       pointer-events: none;
     }
+  }
+
+  &__waiting {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 }

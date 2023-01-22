@@ -1,5 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import { GameStatus } from 'src/app/shared/enums/game-status.enum';
 import { GameStateUpdate } from 'src/app/shared/models/game-state-update.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-play-board',
@@ -7,9 +17,15 @@ import { GameStateUpdate } from 'src/app/shared/models/game-state-update.model';
   styleUrls: ['./play-board.component.scss'],
 })
 export class PlayBoardComponent implements OnInit {
-  @Input() public game: number[] = [];
-  @Output() public sendGameStateUpdate = new EventEmitter<GameStateUpdate>();
+  public gameStatus = GameStatus;
   public gameState: number[][] = [];
+
+  @Input() public game: number[] = [];
+  @Input() public status: string = this.gameStatus.WAITING;
+
+  @Output() public sendGameStateUpdate = new EventEmitter<GameStateUpdate>();
+
+  public constructor(private snackBar: MatSnackBar) {}
 
   public ngOnInit(): void {
     this.setGameState();
@@ -33,11 +49,12 @@ export class PlayBoardComponent implements OnInit {
       group.some((item) => item)
     );
 
-    const itemIndex = this.gameState[groupIndex].reduce(
+    const itemsAmount = this.gameState[groupIndex].reduce(
       (accumulator, currentValue) => accumulator + currentValue
     );
 
-    this.sendGameStateUpdate.emit({ groupIndex, itemIndex });
+    this.sendGameStateUpdate.emit({ groupIndex, itemsAmount });
+    this.setSelectedItems();
   }
 
   private setGameState() {
@@ -66,5 +83,25 @@ export class PlayBoardComponent implements OnInit {
 
   public getIterableArray(number: number) {
     return Array.from(Array(number).keys());
+  }
+
+  public isTakeButtonDisabled(): boolean {
+    return !this.gameState
+      .reduce(
+        (selectedItemsArray, group) => [...selectedItemsArray, ...group],
+        []
+      )
+      .includes(1);
+  }
+
+  public getInviteUrl(): string {
+    return window.location.href;
+  }
+
+  public async onInviteButtonClick() {
+    await navigator.clipboard.writeText(this.getInviteUrl());
+    this.snackBar.open('Link copied!', 'OK', {
+      duration: 3000,
+    });
   }
 }

@@ -5,15 +5,28 @@
     <div class="container__info">Room: {{ roomName }}</div>
   </div>
 
-  <app-play-board
-    class="container__playboard"
-    *ngIf="game$ | async as game"
-    [game]="game"
-  ></app-play-board>
+  <ng-container
+    *ngIf="{
+      game: game$ | async,
+      status: status$ | async,
+      messages: messages$ | async
+    } as roomState"
+  >
+    <ng-container *ngIf="roomState.game as game">
+      <ng-container *ngIf="roomState.status as status">
+        <app-play-board
+          class="container__playboard"
+          [game]="game"
+          [status]="status"
+          (sendGameStateUpdate)="onGameStateUpdate($event)"
+        ></app-play-board>
+      </ng-container>
+    </ng-container>
 
-  <app-chat
-    class="container__chat"
-    [messages]="messages$ | async"
-    (sendMessage)="sendMessage($event)"
-  ></app-chat>
+    <app-chat
+      class="container__chat"
+      [messages]="roomState.messages"
+      (sendMessage)="sendMessage($event)"
+    ></app-chat>
+  </ng-container>
 </div>

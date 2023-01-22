@@ -1,19 +1,36 @@
-<div class="container">
-  <div class="container__board">
-    <div
-      *ngFor="let items of game; let groupIndex = index"
-      class="container__group"
-    >
+<div class="container" [ngSwitch]="status">
+  <div *ngSwitchCase="gameStatus.PLAYING" class="container__game">
+    <div class="container__board">
       <div
-        *ngFor="let item of getIterableArray(items); let itemIndex = index"
-        class="container__item"
-        (click)="onSelectItem(groupIndex, itemIndex)"
-        [ngClass]="{
-          'container__item--selected': gameState[groupIndex][itemIndex]
-        }"
-      ></div>
+        *ngFor="let items of game; let groupIndex = index"
+        class="container__group"
+      >
+        <div
+          *ngFor="let item of getIterableArray(items); let itemIndex = index"
+          class="container__item"
+          (click)="onSelectItem(groupIndex, itemIndex)"
+          [ngClass]="{
+            'container__item--selected': gameState[groupIndex][itemIndex]
+          }"
+        ></div>
+      </div>
+    </div>
+
+    <div
+      class="container__button"
+      [ngClass]="{ 'container__button--disabled': isTakeButtonDisabled() }"
+      (click)="onTake()"
+    >
+      Take
     </div>
   </div>
 
-  <div class="container__button" (click)="onTake()">Take</div>
+  <div *ngSwitchCase="gameStatus.WAITING" class="container__waiting">
+    <p>Waiting for another player to join...</p>
+    <p>You can share the link down bellow to join the room:</p>
+    <div class="container__button" (click)="onInviteButtonClick()">
+      {{ getInviteUrl() }}
+    </div>
+  </div>
 </div>
+{{ status }}

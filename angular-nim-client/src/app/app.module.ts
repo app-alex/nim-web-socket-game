@@ -10,8 +10,13 @@ import { ChatComponent } from './game/components/chat/chat.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { GameComponent } from './game/game.component';
 import { PlayBoardComponent } from './game/components/play-board/play-board.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-const config: SocketIoConfig = { url: environment.SERVER_URL, options: {} };
+const config: SocketIoConfig = {
+  url: environment.SERVER_URL,
+  options: { transports: ['websocket'], upgrade: false },
+};
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +29,9 @@ const config: SocketIoConfig = { url: environment.SERVER_URL, options: {} };
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    MatSnackBarModule,
     SocketIoModule.forRoot(config),
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

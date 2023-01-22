@@ -2,7 +2,9 @@ export enum SocketEvents {
   NEW_MESSAGE = 'NEW_MESSAGE',
   JOIN_ROOM = 'JOIN_ROOM',
   LEAVE_ROOM = 'LEAVE_ROOM',
+  UPDATE_GAME = 'UPDATE_GAME',
 
+  STATUS = 'STATUS',
   ROOMS = 'ROOMS',
   GAME = 'GAME',
   MESSAGES = 'MESSAGES',
