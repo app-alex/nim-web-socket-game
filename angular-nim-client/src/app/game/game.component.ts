@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GameStateUpdate } from '../shared/models/game-state-update.model';
+import { Game } from '../shared/models/game.model';
 import { Message } from '../shared/models/message.model';
 import { SocketService } from '../shared/services/socket.service';
 
@@ -13,7 +14,7 @@ import { SocketService } from '../shared/services/socket.service';
 export class GameComponent implements OnInit, OnDestroy {
   public messages$!: Observable<Message[]>;
   public roomName!: string;
-  public game$!: Observable<number[]>;
+  public game$!: Observable<Game>;
   public status$!: Observable<string>;
 
   public constructor(

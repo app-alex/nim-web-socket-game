@@ -3,6 +3,7 @@ import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { SocketEvents } from '../enums/socket-events.enum';
 import { GameStateUpdate } from '../models/game-state-update.model';
+import { Game } from '../models/game.model';
 import { Message } from '../models/message.model';
 
 @Injectable({
@@ -27,7 +28,7 @@ export class SocketService {
     this.socket.emit(SocketEvents.UPDATE_GAME, gameStateUpdate, roomName);
   }
 
-  public getGame(): Observable<number[]> {
+  public getGame(): Observable<Game> {
     return this.socket.fromEvent(SocketEvents.GAME);
   }
 

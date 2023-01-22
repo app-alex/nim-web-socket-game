@@ -42,10 +42,15 @@
       background-color: #1a1a1a;
       box-shadow: 0px 0px 20px #0066ff;
     }
+
+    &--disabled {
+      border: 2px solid #454545de;
+      background-color: #ebebe4;
+      pointer-events: none;
+    }
   }
 
   &__button {
-    // width: 3rem;
     width: fit-content;
     border: 2px solid #1a1a1a;
     color: #3b3b3b;
@@ -78,5 +83,19 @@
     align-items: center;
     padding-bottom: 1rem;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+
+  &__game-over {
+    text-align: center;
+  }
+
+  &__info {
+    &--won {
+      color: #0066ff;
+    }
+
+    &--lost {
+      color: #dc143c;
+    }
   }
 }

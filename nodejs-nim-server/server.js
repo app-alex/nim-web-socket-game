@@ -2,7 +2,7 @@ const app = require("express")();
 const http = require("http").Server(app);
 const io = require("socket.io")(http, { cors: { origin: "*" } });
 
-const DEFAULT_GAME_STATE = [3, 5, 7];
+const DEFAULT_GAME_BOARD = [3, 5, 7];
 
 const state = new Map();
 // : Map(roomName: string, { messages: { message: string, from: string, date: Date }[], game: number[] })
@@ -60,7 +60,15 @@ io.on("connection", (socket) => {
   }
 
   function emitGameToRoom(roomName) {
-    io.to(roomName).emit("GAME", getGameFromRoom(roomName));
+    const clients = getClientsFromRoom(roomName);
+    const game = getGameFromRoom(roomName);
+
+    clients.forEach((client) => {
+      io.to(client).emit("GAME", {
+        board: game.board,
+        isYourTurn: client === clients[game.turn],
+      });
+    });
   }
 
   function emitStatusToRoom(roomName) {
@@ -70,7 +78,7 @@ io.on("connection", (socket) => {
   function resetRoom(roomName) {
     state.set(roomName, {
       messages: [],
-      game: DEFAULT_GAME_STATE.slice(),
+      game: { board: DEFAULT_GAME_BOARD.slice(), turn: 0 },
     });
   }
 
@@ -129,15 +137,20 @@ io.on("connection", (socket) => {
 
   function updateRoomGame(roomName, gameUpdate) {
     const { groupIndex, itemsAmount } = gameUpdate;
+    const game = state.get(roomName).game;
 
-    state.get(roomName).game[groupIndex] -= itemsAmount;
+    game.board[groupIndex] -= itemsAmount;
+    game.turn = 1 - game.turn;
+
     emitGameToRoom(roomName);
     emitStatusToRoom(roomName);
   }
 
   function getRoomStatus(roomName) {
     if (
-      !getGameFromRoom(roomName).reduce((sum, itemsAmount) => sum + itemsAmount)
+      !getGameFromRoom(roomName).board.reduce(
+        (sum, itemsAmount) => sum + itemsAmount
+      )
     )
       return "GAME_OVER";
 

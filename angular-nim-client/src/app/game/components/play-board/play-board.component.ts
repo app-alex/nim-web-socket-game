@@ -10,6 +10,7 @@ import {
 import { GameStatus } from 'src/app/shared/enums/game-status.enum';
 import { GameStateUpdate } from 'src/app/shared/models/game-state-update.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Game } from 'src/app/shared/models/game.model';
 
 @Component({
   selector: 'app-play-board',
@@ -20,7 +21,7 @@ export class PlayBoardComponent implements OnInit {
   public gameStatus = GameStatus;
   public gameState: number[][] = [];
 
-  @Input() public game: number[] = [];
+  @Input() public game!: Game;
   @Input() public status: string = this.gameStatus.WAITING;
 
   @Output() public sendGameStateUpdate = new EventEmitter<GameStateUpdate>();
@@ -60,7 +61,7 @@ export class PlayBoardComponent implements OnInit {
   private setGameState() {
     const gameState: number[][] = [];
 
-    this.game.map((numberOfItems) => {
+    this.game.board.map((numberOfItems) => {
       const group: number[] = [];
 
       for (let itemIndex = 0; itemIndex < numberOfItems; itemIndex++) {
@@ -74,7 +75,7 @@ export class PlayBoardComponent implements OnInit {
   }
 
   private setSelectedItems() {
-    this.game.map((numberOfItems, groupIndex) => {
+    this.game.board.map((numberOfItems, groupIndex) => {
       for (let itemIndex = 0; itemIndex < numberOfItems; itemIndex++) {
         this.gameState[groupIndex][itemIndex] = 0;
       }
