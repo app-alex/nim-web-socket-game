@@ -7,9 +7,11 @@
       <span> | </span>
       <span
         class="message__from"
-        [ngClass]="
-          message.from === 'You' ? 'message__from--you' : 'message__from--foe'
-        "
+        [ngClass]="{
+          'message__from--you': message.from === 'You',
+          'message__from--foe': message.from === 'Foe',
+          'message__from--server': message.from === 'Server'
+        }"
       >
         {{ message.from }}
       </span>

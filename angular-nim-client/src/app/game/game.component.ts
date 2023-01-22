@@ -43,7 +43,6 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   public leaveRoom() {
-    this.socketService.leaveRoom(this.roomName);
     this.router.navigate(['rooms']);
   }
 

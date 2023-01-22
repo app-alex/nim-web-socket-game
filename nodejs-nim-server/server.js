@@ -48,8 +48,15 @@ io.on("connection", (socket) => {
   function emitMessagesToRoom(roomName) {
     getClientsFromRoom(roomName).forEach((client) => {
       const messagesData = getMessagesFromRoom(roomName).map((message) => {
+        const from =
+          message.from === "Server"
+            ? "Server"
+            : client === message.from
+            ? "You"
+            : "Foe";
+
         return {
-          from: client == message.from ? "You" : "Foe",
+          from,
           text: message.text,
           date: message.date,
         };
@@ -77,7 +84,7 @@ io.on("connection", (socket) => {
 
   function resetRoom(roomName) {
     state.set(roomName, {
-      messages: [],
+      messages: state.get(roomName) ? state.get(roomName).messages : [],
       game: { board: DEFAULT_GAME_BOARD.slice(), turn: 0 },
     });
   }
@@ -92,6 +99,7 @@ io.on("connection", (socket) => {
       return;
     }
 
+    addServerMessageToRoom("Player joined the room", roomName);
     socket.join(roomName);
     emitRooms();
     emitMessagesToRoom(roomName);
@@ -105,6 +113,7 @@ io.on("connection", (socket) => {
     if (!getClientsFromRoom(roomName).length) {
       state.delete(roomName);
     } else {
+      addServerMessageToRoom("Player left the room", roomName);
       resetRoom(roomName);
       emitMessagesToRoom(roomName);
       emitGameToRoom(roomName);
@@ -128,6 +137,12 @@ io.on("connection", (socket) => {
 
   function addMessageToRoom(message, roomName) {
     const newMessageData = { from: socket.id, text: message, date: new Date() };
+
+    state.get(roomName).messages.push(newMessageData);
+  }
+
+  function addServerMessageToRoom(message, roomName) {
+    const newMessageData = { from: "Server", text: message, date: new Date() };
 
     state.get(roomName).messages.push(newMessageData);
   }
