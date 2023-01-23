@@ -19,7 +19,7 @@
     <ng-container *ngIf="roomState.game as game">
       <ng-container *ngIf="roomState.status as status">
         <app-play-board
-          class="container__playboard"
+          class="container__play-board"
           [game]="game"
           [status]="status"
           (sendGameStateUpdate)="onGameStateUpdate($event)"
