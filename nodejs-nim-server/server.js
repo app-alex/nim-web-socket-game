@@ -1,7 +1,8 @@
 const port = process.env.PORT || 8000;
 const app = require("express")();
-const http = require("http").Server(app);
-const io = require("socket.io")(http, { cors: { origin: "*" } });
+const http = require("http");
+const server = http.createServer(app);
+const io = require("socket.io")(server, { cors: { origin: "*" } });
 
 const DEFAULT_GAME_BOARD = [3, 5, 7];
 
@@ -179,6 +180,6 @@ io.on("connection", (socket) => {
   }
 });
 
-http.listen(port, () => {
+server.listen(port, () => {
   console.log("Listening on port " + port);
 });
