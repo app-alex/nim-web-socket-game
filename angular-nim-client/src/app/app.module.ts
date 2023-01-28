@@ -13,8 +13,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const config: SocketIoConfig = {
-  url: 'https://nodejs-nim-server-web-socket.adaptable.app',
-  options: { transports: ['websocket'], upgrade: false },
+  url: 'https://nodejs-nim-server-web-app.onrender.com',
+  options: {
+    transports: ['websocket'],
+    upgrade: false,
+  },
 };
 @NgModule({
   declarations: [
