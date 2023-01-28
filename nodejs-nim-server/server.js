@@ -10,9 +10,15 @@ const state = new Map();
 // : Map(roomName: string, { messages: { message: string, from: string, date: Date }[], game: number[] })
 
 io.on("connection", (socket) => {
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
+
   console.log(socket.id + " connected");
 
   socket.on("disconnecting", () => {
+    console.log(socket.id + " is disconnecting");
+
     socket.rooms.forEach((roomName) => {
       leaveRoom(roomName);
     });
