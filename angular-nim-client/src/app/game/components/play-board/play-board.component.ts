@@ -56,6 +56,7 @@ export class PlayBoardComponent implements OnInit {
 
     this.sendGameStateUpdate.emit({ groupIndex, itemsAmount });
     this.setSelectedItems();
+    this.playTakeSound();
   }
 
   private setGameState() {
@@ -104,5 +105,12 @@ export class PlayBoardComponent implements OnInit {
     this.snackBar.open('Link copied!', 'OK', {
       duration: 3000,
     });
+  }
+
+  private playTakeSound() {
+    const audio = new Audio('../../../assets/take-sound.wav');
+    audio.volume = 0.4;
+    audio.load();
+    audio.play();
   }
 }
