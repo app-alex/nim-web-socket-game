@@ -27,7 +27,10 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   public onSendMessage() {
-    this.sendMessage.emit(this.message);
+    if (this.message) {
+      this.sendMessage.emit(this.message);
+    }
+
     this.message = '';
     this.scrollChat();
   }
