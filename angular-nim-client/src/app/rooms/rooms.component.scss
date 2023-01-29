@@ -40,7 +40,14 @@
     }
   }
 
+  &__rooms {
+    max-width: 100%;
+  }
+
   &__button {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     margin: 0.5rem 0;
     border: 2px solid #1a1a1a;
     color: #3b3b3b;
