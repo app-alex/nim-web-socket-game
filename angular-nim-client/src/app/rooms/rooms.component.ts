@@ -22,7 +22,9 @@ export class RoomsComponent implements OnInit {
   }
 
   public createRoom() {
-    this.router.navigate(['game/' + this.roomName]);
+    if (this.roomName) {
+      this.router.navigate(['game/' + this.roomName]);
+    }
   }
 
   public joinRoom(roomName: string) {
