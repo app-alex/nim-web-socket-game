@@ -118,9 +118,11 @@ io.on("connection", (socket) => {
   function leaveRoom(roomName) {
     socket.leave(roomName);
 
-    if (!getClientsFromRoom(roomName).length) {
+    const numberOfClients = getClientsFromRoom(roomName).length;
+
+    if (!numberOfClients) {
       state.delete(roomName);
-    } else {
+    } else if (numberOfClients < 2) {
       addServerMessageToRoom("Player left the room", roomName);
       resetRoom(roomName);
       emitMessagesToRoom(roomName);
